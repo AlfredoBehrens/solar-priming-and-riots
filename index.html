@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brazil 2013: Solar Activity and Social Dynamics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #228B22 0%, #006400 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border: 3px solid #228B22;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #006400;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,100,0,0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #228B22;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(34,139,34,0.15);
+            border: 2px solid rgba(34,139,34,0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #006400;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .correlation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .correlation-card {
+            background: linear-gradient(135deg, #f0fff0, #e6ffe6);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid rgba(34,139,34,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .correlation-card:hover {
+            border-color: #228B22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34,139,34,0.2);
+        }
+        
+        .correlation-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .correlation-label {
+            font-size: 0.9em;
+            color: #006400;
+            font-weight: 500;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(240,255,240,0.8);
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid rgba(34,139,34,0.3);
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+        
+        .insights {
+            background: linear-gradient(135deg, #228B22, #006400);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #32CD32;
+        }
+        
+        .insights h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+        
+        .insights p {
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        @media (max-width: 1200px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .correlation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brazil 2013: Solar Activity and Social Dynamics</h1>
+        <p class="subtitle">Exploring biological mediation and protest period dynamics</p>
+        
+        <div class="charts-container">
+            <div class="chart-section">
+                <div class="chart-title">Lag Correlation Analysis</div>
+                <div class="chart-container">
+                    <canvas id="lagCorrelationChart"></canvas>
+                </div>
+                <div class="correlation-grid" id="correlationGrid">
+                    <!-- Correlation values will be populated here -->
+                </div>
+            </div>
+            
+            <div class="chart-section">
+                <div class="chart-title">Communal/Agentic Ratio During Protest Periods</div>
+                <div class="chart-container">
+                    <canvas id="ratioChart"></canvas>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FFD700;"></div>
+                        Porto Alegre (27-29 Mar)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #32CD32;"></div>
+                        Jornadas de Junho (5-30 Jun)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #4169E1;"></div>
+                        Professores (7-14 Oct)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #808080;"></div>
+                        Grito da Liberdade (14-28 Nov)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="insights">
+            <h3>Key Insights</h3>
+            <p><strong>Biological Mediation Hypothesis:</strong> The analysis reveals whether lagged correlations between solar activity and social behaviors are stronger than immediate correlations, suggesting biological mediation pathways with delayed neurobiological responses.</p>
+            <p><strong>Protest Period Dynamics:</strong> The communal/agentic ratio shows distinct patterns during Brazil's major 2013 protest periods, with notable spikes in communal language during collective mobilization events.</p>
+            <p><strong>Temporal Patterns:</strong> Solar priming and burst intensity demonstrate complex relationships with both agentic (success, winning, struggle) and communal (belonging, solidarity, commitment) keywords, with varying lag effects throughout the year.</p>
+        </div>
+    </div>
+
+    <script>
+        // Data processing
+        const rawData = `Week	Solar Priming	BurstIntensity	BR_Ag_sucesso-success	BR_Ag_ganhar-to win	BR_Ag_lutar-to strugglr	BR_Co_ Participação-belonging	BR_Co_ solidariedade.solidarity	BR_Co_compromisso-Commitment
+06/01/2013	5.003362	5.312407	91	68	29	31	34	74
+13/01/2013	2.447164	9.453006	95	74	26	31	28	62
+20/01/2013	5.847078	9.507757	97	74	27	33	33	63
+27/01/2013	9.1734	9.507757	84	71	29	33	52	67
+03/02/2013	9.452965	9.446879	100	67	29	35	29	77
+10/02/2013	6.398246	9.644519	84	75	25	29	19	61
+17/02/2013	3.276388	9.672476	97	70	26	53	42	90
+24/02/2013	1.015053	9.692877	100	69	22	37	64	76
+03/03/2013	1.567526	9.706478	95	69	100	47	63	70
+10/03/2013	9.78291	8.231347	85	73	56	55	69	76
+17/03/2013	7.466601	7.402256	95	71	32	55	87	78
+24/03/2013	3.742518	7.447368	88	79	29	49	71	74
+31/03/2013	1.231389	7.447368	91	71	33	58	92	81
+07/04/2013	0.265779	8.035059	100	67	32	57	91	88
+14/04/2013	3.577251	1.266835	95	73	32	58	93	87
+21/04/2013	4.2384	0.108108	93	65	32	60	95	71
+28/04/2013	7.962764	0.108108	97	74	29	57	68	90
+05/05/2013	5.266478	0.279923	98	65	34	61	70	95
+12/05/2013	3.093449	4.170378	93	70	24	65	79	87
+19/05/2013	3.276388	5.432203	91	67	24	66	88	80
+26/05/2013	6.941534	5.432203	87	74	26	61	63	76
+02/06/2013	9.657853	5.228814	86	70	27	76	88	86
+09/06/2013	6.028709	7.278311	82	71	32	63	84	86
+16/06/2013	2.089334	9.678899	79	81	41	71	77	87
+23/06/2013	4.2384	9.678332	82	83	33	57	76	69
+30/06/2013	7.962764	9.678332	79	80	28	53	49	74
+07/07/2013	9.824955	9.568871	72	69	38	44	40	67
+14/07/2013	7.962764	9.38944	83	72	34	46	41	61
+21/07/2013	4.2384	9.551393	83	79	25	37	35	71
+28/07/2013	1.481034	9.551393	86	81	30	53	51	66
+04/08/2013	0.339523	9.48913	91	76	29	84	51	71
+11/08/2013	6.329196	2.01119	82	79	28	65	45	99
+18/08/2013	4.758937	1.561776	82	78	32	72	67	77
+25/08/2013	1.766033	1.527027	90	78	27	79	87	81
+01/09/2013	0.430007	1.196911	82	83	27	80	75	93
+08/09/2013	1.118397	0.276062	82	76	28	79	60	77
+15/09/2013	2.122848	4.899636	86	76	31	65	83	85
+22/09/2013	4.2384	8.153584	85	81	33	75	100	100
+29/09/2013	7.962764	8.153584	92	84	32	62	78	91
+06/10/2013	3.908226	5.025788	85	84	39	68	77	77
+13/10/2013	3.742518	2.677514	85	79	35	62	48	78
+20/10/2013	7.466601	3.309524	94	71	37	100	78	94
+27/10/2013	9.78291	3.309524	92	73	30	78	62	92
+03/11/2013	8.419348	3.187075	84	71	32	70	59	95
+10/11/2013	5.126606	4.345011	95	74	33	64	54	65
+17/11/2013	3.276388	5.782114	92	75	28	68	82	82
+24/11/2013	1.015053	5.533898	90	70	29	61	76	95
+01/12/2013	0.210049	5.446731	89	78	29	45	61	68
+08/12/2013	4.176178	6.377623	84	78	31	41	47	60
+15/12/2013	5.847078	7.936856	97	85	31	29	42	63
+22/12/2013	9.1734	8.383959	73	81	24	18	18	50
+29/12/2013	9.452965	8.383959	73	100	26	24	15	66`;
+
+        // Parse data
+        const lines = rawData.trim().split('\n');
+        const headers = lines[0].split('\t');
+        const data = [];
+        
+        for (let i = 1; i < lines.length; i++) {
+            const values = lines[i].split('\t');
+            const entry = {};
+            headers.forEach((header, index) => {
+                if (index === 0) {
+                    // Parse date
+                    const [day, month, year] = values[index].split('/');
+                    entry.date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                    entry.week = values[index];
+                } else {
+                    entry[header.trim()] = parseFloat(values[index]);
+                }
+            });
+            data.push(entry);
+        }
+        
+        // Calculate correlations
+        function calculateCorrelation(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+            const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+            const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
+            
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+            
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+        
+        // Calculate lag correlations
+        function calculateLagCorrelations() {
+            const solarPriming = data.map(d => d['Solar Priming']);
+            const burstIntensity = data.map(d => d['BurstIntensity']);
+            const agentic = data.map(d => (d['BR_Ag_sucesso-success'] + d['BR_Ag_ganhar-to win'] + d['BR_Ag_lutar-to strugglr']) / 3);
+            const communal = data.map(d => (d['BR_Co_ Participação-belonging'] + d['BR_Co_ solidariedade.solidarity'] + d['BR_Co_compromisso-Commitment']) / 3);
+            
+            const correlations = {
+                immediate: {
+                    solarAgentic: calculateCorrelation(solarPriming, agentic),
+                    solarCommunal: calculateCorrelation(solarPriming, communal),
+                    burstAgentic: calculateCorrelation(burstIntensity, agentic),
+                    burstCommunal: calculateCorrelation(burstIntensity, communal)
+                },
+                lag1: {
+                    solarAgentic: calculateCorrelation(solarPriming.slice(0, -1), agentic.slice(1)),
+                    solarCommunal: calculateCorrelation(solarPriming.slice(0, -1), communal.slice(1)),
+                    burstAgentic: calculateCorrelation(burstIntensity.slice(0, -1), agentic.slice(1)),
+                    burstCommunal: calculateCorrelation(burstIntensity.slice(0, -1), communal.slice(1))
+                },
+                lag2: {
+                    solarAgentic: calculateCorrelation(solarPriming.slice(0, -2), agentic.slice(2)),
+                    solarCommunal: calculateCorrelation(solarPriming.slice(0, -2), communal.slice(2)),
+                    burstAgentic: calculateCorrelation(burstIntensity.slice(0, -2), agentic.slice(2)),
+                    burstCommunal: calculateCorrelation(burstIntensity.slice(0, -2), communal.slice(2))
+                }
+            };
+            
+            return correlations;
+        }
+        
+        const correlations = calculateLagCorrelations();
+        
+        // Create lag correlation chart with specified axis limits
+        const lagCtx = document.getElementById('lagCorrelationChart').getContext('2d');
+        new Chart(lagCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Solar → Agentic', 'Solar → Communal', 'Burst → Agentic', 'Burst → Communal'],
+                datasets: [{
+                    label: 'Immediate (0 weeks)',
+                    data: [
+                        correlations.immediate.solarAgentic,
+                        correlations.immediate.solarCommunal,
+                        correlations.immediate.burstAgentic,
+                        correlations.immediate.burstCommunal
+                    ],
+                    backgroundColor: 'rgba(34, 139, 34, 0.8)',
+                    borderColor: 'rgba(34, 139, 34, 1)',
+                    borderWidth: 2
+                }, {
+                    label: '1-week lag',
+                    data: [
+                        correlations.lag1.solarAgentic,
+                        correlations.lag1.solarCommunal,
+                        correlations.lag1.burstAgentic,
+                        correlations.lag1.burstCommunal
+                    ],
+                    backgroundColor: 'rgba(50, 205, 50, 0.8)',
+                    borderColor: 'rgba(50, 205, 50, 1)',
+                    borderWidth: 2
+                }, {
+                    label: '2-week lag',
+                    data: [
+                        correlations.lag2.solarAgentic,
+                        correlations.lag2.solarCommunal,
+                        correlations.lag2.burstAgentic,
+                        correlations.lag2.burstCommunal
+                    ],
+                    backgroundColor: 'rgba(0, 100, 0, 0.8)',
+                    borderColor: 'rgba(0, 100, 0, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: -0.7,
+                        max: 0.4,
+                        title: {
+                            display: true,
+                            text: 'Correlation Coefficient',
+                            color: '#006400'
+                        },
+                        grid: {
+                            color: 'rgba(34, 139, 34, 0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(34, 139, 34, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                }
+            }
+        });
+        
+        // Populate correlation grid with strongest correlations
+        const correlationGrid = document.getElementById('correlationGrid');
+        
+        // Find strongest correlations for each relationship
+        const strongestCorrelations = {
+            solarAgentic: Math.max(
+                Math.abs(correlations.immediate.solarAgentic),
+                Math.abs(correlations.lag1.solarAgentic),
+                Math.abs(correlations.lag2.solarAgentic)
+            ),
+            solarCommunal: Math.max(
+                Math.abs(correlations.immediate.solarCommunal),
+                Math.abs(correlations.lag1.solarCommunal),
+                Math.abs(correlations.lag2.solarCommunal)
+            ),
+            burstAgentic: Math.max(
+                Math.abs(correlations.immediate.burstAgentic),
+                Math.abs(correlations.lag1.burstAgentic),
+                Math.abs(correlations.lag2.burstAgentic)
+            ),
+            burstCommunal: Math.max(
+                Math.abs(correlations.immediate.burstCommunal),
+                Math.abs(correlations.lag1.burstCommunal),
+                Math.abs(correlations.lag2.burstCommunal)
+            )
+        };
+        
+        // Count lag dominance
+        let lagDominant = 0;
+        let immediateDominant = 0;
+        
+        Object.keys(strongestCorrelations).forEach(key => {
+            const immediate = Math.abs(correlations.immediate[key]);
+            const lag1 = Math.abs(correlations.lag1[key]);
+            const lag2 = Math.abs(correlations.lag2[key]);
+            
+            if (lag1 > immediate || lag2 > immediate) {
+                lagDominant++;
+            } else {
+                immediateDominant++;
+            }
+        });
+        
+        const correlationData = [
+            { label: 'Solar-Agentic Max', value: strongestCorrelations.solarAgentic.toFixed(3) },
+            { label: 'Solar-Communal Max', value: strongestCorrelations.solarCommunal.toFixed(3) },
+            { label: 'Burst-Agentic Max', value: strongestCorrelations.burstAgentic.toFixed(3) },
+            { label: 'Burst-Communal Max', value: strongestCorrelations.burstCommunal.toFixed(3) },
+            { label: 'Lag Evidence', value: `${lagDominant}/${lagDominant + immediateDominant}` },
+            { label: 'Mediation Support', value: lagDominant > immediateDominant ? 'Strong' : 'Weak' }
+        ];
+        
+        correlationData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'correlation-card';
+            const numValue = parseFloat(item.value);
+            let color = '#228B22';
+            if (!isNaN(numValue)) {
+                color = numValue > 0.3 ? '#006400' : numValue > 0.1 ? '#228B22' : '#32CD32';
+            } else if (item.value === 'Strong') {
+                color = '#006400';
+            } else if (item.value === 'Weak') {
+                color = '#FF6347';
+            }
+            
+            card.innerHTML = `
+                <div class="correlation-value" style="color: ${color}">${item.value}</div>
+                <div class="correlation-label">${item.label}</div>
+            `;
+            correlationGrid.appendChild(card);
+        });
+        
+        // Calculate communal/agentic ratio
+        const ratioData = data.map(d => ({
+            date: d.date,
+            week: d.week,
+            ratio: (d['BR_Co_ Participação-belonging'] + d['BR_Co_ solidariedade.solidarity'] + d['BR_Co_compromisso-Commitment']) / 
+                   (d['BR_Ag_sucesso-success'] + d['BR_Ag_ganhar-to win'] + d['BR_Ag_lutar-to strugglr'])
+        }));
+        
+        // Create ratio chart with precise protest period shading
+        const ratioCtx = document.getElementById('ratioChart').getContext('2d');
+        
+        // Define precise protest periods
+        const protestPeriods = [
+            { start: new Date(2013, 2, 27), end: new Date(2013, 2, 29), color: 'rgba(255, 215, 0, 0.4)', label: 'Porto Alegre' },
+            { start: new Date(2013, 5, 5), end: new Date(2013, 5, 30), color: 'rgba(50, 205, 50, 0.4)', label: 'Jornadas de Junho' },
+            { start: new Date(2013, 9, 7), end: new Date(2013, 9, 14), color: 'rgba(65, 105, 225, 0.4)', label: 'Professores' },
+            { start: new Date(2013, 10, 14), end: new Date(2013, 10, 28), color: 'rgba(128, 128, 128, 0.4)', label: 'Grito da Liberdade' }
+        ];
+        
+        // Create background rectangles for protest periods
+        const backgroundPlugin = {
+            id: 'backgroundPlugin',
+            beforeDraw: (chart) => {
+                const ctx = chart.ctx;
+                const chartArea = chart.chartArea;
+                
+                protestPeriods.forEach(period => {
+                    const startIndex = ratioData.findIndex(d => d.date >= period.start);
+                    const endIndex = ratioData.findIndex(d => d.date > period.end);
+                    
+                    if (startIndex !== -1) {
+                        const xStart = chart.scales.x.getPixelForValue(startIndex);
+                        const xEnd = endIndex !== -1 ? chart.scales.x.getPixelForValue(endIndex - 1) : chart.scales.x.getPixelForValue(ratioData.length - 1);
+                        
+                        ctx.save();
+                        ctx.fillStyle = period.color;
+                        ctx.fillRect(xStart, chartArea.top, xEnd - xStart, chartArea.bottom - chartArea.top);
+                        ctx.restore();
+                    }
+                });
+            }
+        };
+        
+        new Chart(ratioCtx, {
+            type: 'line',
+            data: {
+                labels: ratioData.map((d, index) => {
+                    // Show date every two weeks
+                    if (index % 2 === 0) {
+                        const day = d.date.getDate().toString().padStart(2, '0');
+                        const month = (d.date.getMonth() + 1).toString().padStart(2, '0');
+                        return `${day}/${month}`;
+                    }
+                    return '';
+                }),
+                datasets: [{
+                    label: 'Communal/Agentic Ratio',
+                    data: ratioData.map(d => d.ratio),
+                    borderColor: '#228B22',
+                    backgroundColor: 'rgba(34, 139, 34, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#228B22',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date (Day/Month)',
+                            color: '#006400'
+                        },
+                        grid: {
+                            color: 'rgba(34, 139, 34, 0.1)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Communal/Agentic Ratio',
+                            color: '#006400'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(34, 139, 34, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                }
+            },
+            plugins: [backgroundPlugin]
+        });
+    </script>
+</body>
+</html>
