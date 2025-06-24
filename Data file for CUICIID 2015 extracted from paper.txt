@@ -1,0 +1,51 @@
+The Solar Pendulum: Solar Cycle Correlations with Political Leadership Emergence Through the Agency-Communion Framework												
+Appendix A: Leader Classification Details												
+			ChatGPT		Author	Claude.ai						
+Year	Sunspots	Leader	Type	Strength		Type	Strength					
+1963	40	Johnson, L.B.	Communal	3	Communal	Agentic	2					
+1964	15	Brezhnev, L.	Communal	2	Communal	Agentic	2					
+1968	150	Trudeau Sr., P.	Communal	2	Agentic	Agentic	2					
+1969	150	Brandt, Willy	Communal	2	Communal	Communal	2					
+1970	148	Allende, S. 	Communal	3	Communal	Communal	2					
+1970	148	Heath, Edward	Communal	2	Agentic	Agentic	2					
+1970	148	Nixon, Richard	Agentic	3	Agentic	Agentic	3					
+1970	48	Palme, Olof	Communal	3	Communal	Communal	2					
+1970	148	Pompidou, G.	Communal	2	Agentic	Agentic	2					
+1972	98	Whitlam, G.	Communal	2	Communal	Communal	2					
+1973	54	Perón, J. D.	Agentic	3	Agentic	Agentic	3					
+1974	39	Karamanlis, C.	Communal	2	Communal	Agentic	1					
+1974	49	Wilson, Harold	Communal	2	Communal	Communal	2					
+1977	39	Carter, Jimmy	Communal	3	Communal	Communal	2					
+1979	220	Thatcher, M.	Agentic	3	Agentic	Agentic	3					
+1981	198	Medvedev, D. 	Communal	1	Agentic	Agentic	1					
+1981	219	Reagan, R.	Agentic	3	Agentic	Agentic	3					
+1985	21	Gorbachev, M. 	Communal	3	Communal	Communal	2					
+1989	211	Bush Sr., G.H.W.	Agentic	3	Agentic	Agentic	2					
+1993	76	Clinton, Bill	Communal	2	Communal	Agentic	2					
+1994	95	Mandela	Communal	3	Communal	Communal	3					
+1997	29	Blair, Tony	Communal	2	Communal	Agentic	3					
+1998	88	Orbán I (early years)	Communal	2	Communal	Communal	2					
+2000	174	Putin, Vladimir	Agentic	3	Agentic	Agentic	3					
+2001	170	Bush Jr., George W.	Agentic	3	Agentic	Agentic	3					
+2003	99	Lula	Communal	3	Communal	Communal	2					
+2004	65	Zapatero, J.L.	Communal	2	Communal	Communal	2					
+2005	46	Benedict XVI, Pope	Communal	2	Communal	Communal	1					
+2005	46	Merkel, Angela	Communal	2	Communal	Communal	2					
+2006	25	Morales, Evo	Communal	3	Communal	Communal	2					
+2007	13	Brown, Gordon	Communal	2	Communal	Communal	2					
+2009	5	Obama, Barack	Communal	2	Communal	Communal	2					
+2010	25	Cameron, D.	Agentic	2	Agentic	Agentic	2					
+2010	25	Mujica, José	Communal	3	Communal	Communal	3					
+2012	85	Hollande, F.	Communal	2	Communal	Communal	1					
+2013	94	Erdo?an, R.T.	Agentic	3	Agentic	Agentic	3					
+2013	94	Francis, Pope	Communal	3	Communal	Communal	3					
+2013	94	Xi Jinping	Agentic	3	Agentic	Agentic	3					
+2014	113	Modi, N.	Agentic	3	Agentic	Agentic	3					
+2015	70	Costa, António	Communal	2	Communal	Communal	2					
+2015	25	Orbán II (later)	Agentic	3	Agentic	Agentic	3					
+2016	40	May, Theresa	Agentic	2	Agentic	Agentic	3					
+2017	22	Trump I (2016–20)	Agentic	3	Agentic	Agentic	3					
+2018	7	Sánchez, Pedro	Communal	2	Communal	Communal	1					
+2022	83	Meloni	Agentic	3	Agentic	Agentic	2					
+2023	126	Milei, Javier	Agentic	3	Agentic	Agentic	3					
+2025	137	Trump II (2025– )	Agentic	3	Agentic	Agentic	3					
